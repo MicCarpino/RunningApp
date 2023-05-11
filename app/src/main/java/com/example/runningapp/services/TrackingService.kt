@@ -23,7 +23,7 @@ import com.example.runningapp.other.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.runningapp.other.Constants.ACTION_STOP_SERVICE
 import com.example.runningapp.other.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.runningapp.other.Constants.LOCATION_UPDATE_INTERVALE
-import com.example.runningapp.other.Constants.NOTIFIATION_CHANNEL_NAME
+import com.example.runningapp.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.runningapp.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.runningapp.other.Constants.NOTIFICATION_ID
 import com.example.runningapp.other.TrackingUtility
@@ -72,10 +72,12 @@ class TrackingService : LifecycleService() {
                         startForegroundService()
                         isFirstRun = false
                     } else {
+                        startForegroundService()
                         Timber.d("Resumed service")
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
+                    pauseService()
                     Timber.d("Paused service")
                 }
                 ACTION_STOP_SERVICE -> {
@@ -84,6 +86,10 @@ class TrackingService : LifecycleService() {
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun pauseService(){
+        isTracking.postValue(false)
     }
 
     @SuppressLint("MissingPermission")
@@ -169,7 +175,7 @@ class TrackingService : LifecycleService() {
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
-            NOTIFIATION_CHANNEL_NAME,
+            NOTIFICATION_CHANNEL_NAME,
             IMPORTANCE_LOW
         )
         notificationManager.createNotificationChannel(channel)
