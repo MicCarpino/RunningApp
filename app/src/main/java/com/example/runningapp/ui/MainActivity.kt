@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         binding.bottomNavigationView.setupWithNavController(binding.root.findNavController())
+        binding.bottomNavigationView.setOnNavigationItemReselectedListener { /*no operation*/ }
 
         binding.root.findNavController().addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
