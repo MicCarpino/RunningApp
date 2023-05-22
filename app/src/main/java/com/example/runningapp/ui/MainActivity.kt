@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.runningapp.R
 import com.example.runningapp.databinding.ActivityMainBinding
@@ -25,10 +26,13 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        binding.bottomNavigationView.setupWithNavController(binding.root.findNavController())
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        binding.bottomNavigationView.setupWithNavController(navController)
         binding.bottomNavigationView.setOnNavigationItemReselectedListener { /*no operation*/ }
 
-        binding.root.findNavController().addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.settingsFragment, R.id.runFragment, R.id.statisticsFragment ->
                     binding.bottomNavigationView.visibility = View.VISIBLE
